@@ -1,53 +1,42 @@
-noseX = 0;
-noseY = 0;
 difference = 0;
 rightWristX = 0;
 leftWristX = 0;
 
-function preload()
-{
+  function setup() {
+  video = createCapture(VIDEO);
+  video.size(550, 500);
 
+  canvas = createCanvas(550, 550);
+  canvas.position(560,150);
+
+  poseNet = ml5.poseNet(video, modelLoaded);
+  poseNet.on('pose', gotPoses);
 }
 
-function setup()
-{
-    video = createCapture(VIDEO);
-    video.size(550, 500);
-
-    canvas = createCanvas(550, 450);
-    canvas.position(560, 50);
-
-    poseNet = ml5.poseNet(video, modalLoaded);
-    poseNet.on('pose', gotPoses);
+function modelLoaded() {
+  console.log('PoseNet Is Initialized!');
 }
 
-function modalLoaded()
-{
-    console.log('PoseNet is Intialized');
-}
 
 function gotPoses(results)
 {
-    if(results.length > 0)
-    {
-        console.log(results);
-        noseX = results[0].pose.nose.x;
-        noseY = results[0].pose.nose.y;
+  if(results.length > 0)
+  {
+    console.log(results);
 
-        leftWristX = results[0].pose.leftWrist.x;
-        rightWristX = results[0].pose.rightWrist.x;
-        difference = floor( leftWristX - rightWristX );
+    leftWristX = results[0].pose.leftWrist.x;
+    rightWristX = results[0].pose.rightWrist.x;
+    difference = floor(leftWristX - rightWristX);
 
-        console.log('leftWristX = ' + leftWristX + 'rightWristX = ' + rightWristX + 'difference = '+ difference);
-    }
+    console.log("leftWristX  = " + leftWristX  + " rightWristX = "+ rightWristX + " difference = " + difference);
+  }
 }
 
-function draw()
-{
-    background('#00FFFF');
-    document.getElementById('text_side').innerHTML = 'Width and Height of the text will be = ' + difference + 'px';
-    fill('#ff0000');
-    stroke('#32CD32');
-    text(noseX, noseY, difference);
+function draw() {
+background('#6C91C2');
 
+  document.getElementById("text_size").innerHTML = "The text of the font will be = " + difference +"px";
+textSize(difference);
+fill('#FFE787');
+text('Coding', 50, 400);
 }
